@@ -1,61 +1,74 @@
-# Welcome to your Lovable project
+Demo: https://playpod-frontend.vercel.app/
 
-## Project info
+# PLayPod
 
-**URL**: 
+A modern web application for rhythm-based music interaction and play.
 
-## How can I edit this code?
+## Project Description
 
-There are several ways of editing your application.
+PlayPod is a dynamic web application that combines music and interactive elements to create an engaging rhythm-based experience. Built with React and TypeScript, it provides a responsive interface for music exploration and interaction.
 
-**Use Lovable**
+## Installation and Setup
 
-Simply visit the []() and start prompting.
+```bash
+# Clone the repository
+git clone [repository-url]
+cd rhythm-verse-play
 
-Changes made via Lovable will be committed automatically to this repo.
+# Install dependencies
+npm install
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## API Endpoints
 
-**Use GitHub Codespaces**
+The frontend currently connects to the following backend endpoints:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- `/api/*` - Core application API routes
+- `/media/*` - Media file access
+- `/static/*` - Static asset access
 
-## What technologies are used for this project?
+All API requests are proxied to a Django backend running at http://127.0.0.1:8000.
 
-This project is built with:
+## Design and Development Process
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The development process focused on creating a modular, component-based architecture using React and TypeScript. The UI was designed using Tailwind CSS to ensure responsive design and consistent styling.
+
+The project follows a structured approach with clear separation between:
+- Components (reusable UI elements)
+- Pages (route-specific views)
+- Hooks (shared functionality)
+- Contexts (application state)
+- Layouts (page structure)
+
+## Unique Approaches
+
+- **Component Tagging**: Used the "lovable-tagger" in development mode to improve component identification and debugging
+- **Internationalization**: Implemented through dedicated i18n directory for multi-language support
+- **Custom Animation System**: Developed with Tailwind's animation utilities for smooth UI transitions
+
+## Development Tradeoffs
+
+- **Performance vs. Developer Experience**: Chose to use SWC compiler with Vite for faster development experience, balancing build speed with bundle size
+- **API Proxying**: Implemented a development proxy to connect with the Django backend, simplifying API calls at the cost of some configuration complexity
+- **Styling Approach**: Selected Tailwind CSS for rapid UI development, accepting the tradeoff of more verbose HTML markup for faster styling iterations
+
+## Known Issues
+
+- Some API endpoints may return 404 errors during development if the corresponding Django backend routes are not properly configured
+- Media loading may experience delays when first accessing content through the proxy
+
+## Technology Stack Choice
+
+- **React + TypeScript**: Provides type safety and better developer experience through static type checking
+- **Vite**: Offers significantly faster development server and build times compared to alternatives
+- **Tailwind CSS**: Enables rapid UI development with utility-first approach
+- **Django Backend**: Chosen for its robust ORM, admin interface, and security features
+
+## Development Challenges
+
+The development process presented some challenges due to my limited familiarity with the specific language and framework combination. Despite these obstacles, I put forth my best effort to implement a clean, maintainable codebase that follows best practices. Learning TypeScript's type system alongside React's component patterns required additional time investment but ultimately resulted in more robust code.
