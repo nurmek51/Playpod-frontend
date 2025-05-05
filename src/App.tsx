@@ -18,6 +18,9 @@ import ArtistPage from "./pages/ArtistPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
+import AllPlaylistsPage from "./pages/AllPlaylistsPage";
+import UserPage from "./pages/UserPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
@@ -50,6 +53,9 @@ const App = () => (
                     <Route path="/favorites" element={<FavoritesPage />} />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/all-playlists/:category" element={<AllPlaylistsPage />} />
+                    <Route path="/user/:id" element={<UserPage />} />
                   </Route>
                   
                   <Route path="*" element={<NotFound />} />

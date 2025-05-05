@@ -12,7 +12,7 @@ const MainLayout: React.FC = () => {
       <Header />
       
       <div className="flex flex-1">
-        <div className="hidden md:block">
+        <div className="hidden md:block w-[250px] flex-shrink-0">
           <Sidebar />
         </div>
         
@@ -25,7 +25,8 @@ const MainLayout: React.FC = () => {
       <Player />
 
       {/* Global styles */}
-      <style jsx global>{`
+      <style>
+        {`
         @keyframes heart-beat {
           0% { transform: scale(1); }
           25% { transform: scale(1.2); }
@@ -36,16 +37,17 @@ const MainLayout: React.FC = () => {
         .animate-heart-beat {
           animation: heart-beat 0.3s ease-in-out;
         }
-        .active\:scale-95:active {
+        .active\\:scale-95:active {
           transform: scale(0.95);
         }
-        .active\:scale-98:active {
+        .active\\:scale-98:active {
           transform: scale(0.98);
         }
-        .active\:scale-90:active {
+        .active\\:scale-90:active {
           transform: scale(0.9);
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };

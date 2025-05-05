@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Play, Shuffle, MoreHorizontal } from "lucide-react";
+import { Play, Shuffle, MoreHorizontal, Heart } from "lucide-react";
 import { getFavorites } from "../api/musicService";
 import { usePlayer } from "../contexts/PlayerContext";
 import { useAuth } from "../contexts/AuthContext";

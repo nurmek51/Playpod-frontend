@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,9 +14,14 @@ const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
   const { isAuthenticated, user, logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  
+  const isSearchPage = location.pathname === "/search";
+  const isMobile = window.innerWidth < 768;
+  const showSearchBar = !(isSearchPage && isMobile);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -48,9 +53,11 @@ const Header: React.FC = () => {
         <Logo />
       </div>
       
-      <div className="flex-1 md:flex-none md:w-1/2 mx-4 md:mx-8 max-w-xl">
-        <SearchBar />
-      </div>
+      {showSearchBar && (
+        <div className="flex-1 flex justify-center mx-4 md:mx-8 max-w-xl">
+          <SearchBar />
+        </div>
+      )}
       
       <div className="flex items-center space-x-4">
         <button

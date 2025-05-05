@@ -64,10 +64,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				playpod: {
-					primary: "#9b87f5",
-					secondary: "#7E69AB",
-					tertiary: "#6E59A5",
-					light: "#E5DEFF",
+					primary: "#33C3F0",     // Sky Blue (replacing purple)
+					secondary: "#0EA5E9",   // Ocean Blue (replacing purple secondary)
+					tertiary: "#0284C7",    // Deeper Blue (replacing purple tertiary)
+					light: "#D3E4FD",       // Soft Blue (replacing light purple)
 				}
 			},
 			borderRadius: {

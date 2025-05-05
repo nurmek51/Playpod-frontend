@@ -186,18 +186,18 @@ const ArtistPage: React.FC = () => {
       <div className="mb-10">
         <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
           <img
-            src={artist.avatarUrl}
-            alt={artist.name}
+            src={artist?.avatarUrl}
+            alt={artist?.name}
             className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-md"
           />
           <div className="text-center md:text-left">
             <div className="text-sm text-muted-foreground mb-1">ARTIST</div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-2">{artist.name}</h1>
-            {artist.description && (
+            <h1 className="text-3xl md:text-5xl font-bold mb-2">{artist?.name}</h1>
+            {artist?.description && (
               <p className="text-muted-foreground mb-2 max-w-2xl">{artist.description}</p>
             )}
             <div className="text-sm text-muted-foreground">
-              <span>{formatNumber(artist.followers)} {t("artist.followers")}</span>
+              <span>{formatNumber(artist?.followers || 0)} {t("artist.followers")}</span>
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@ const ArtistPage: React.FC = () => {
       </div>
 
       {/* Top Tracks */}
-      <section className="mb-10">
+      <section className="mb-10 overflow-x-hidden">
         <h2 className="text-2xl font-bold mb-4">{t("artist.popular")}</h2>
         {topTracks.length > 0 ? (
           <TrackList tracks={topTracks} />
@@ -234,7 +234,7 @@ const ArtistPage: React.FC = () => {
       {/* Albums */}
       <section>
         <h2 className="text-2xl font-bold mb-4">{t("artist.albums")}</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {albums.map(album => (
             <div 
               key={album.id}

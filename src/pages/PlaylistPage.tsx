@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Play, Shuffle, Clock, MoreHorizontal, Plus } from "lucide-react";
+import { Play, Shuffle, Clock, MoreHorizontal, Plus, RefreshCw } from "lucide-react";
 import { getPlaylistById, getPlaylistTracks, createPlaylist } from "../api/musicService";
 import { usePlayer } from "../contexts/PlayerContext";
 import TrackList from "../components/TrackList";
@@ -10,6 +9,59 @@ import CreatePlaylistModal from "../components/CreatePlaylistModal";
 import { Button } from "@/components/ui/button";
 import { Track, Playlist } from "../api/musicService";
 import { useToast } from "@/hooks/use-toast";
+
+// Mock data for playlist and tracks
+
+// ... keep existing code (mockPlaylist and mockTracks)
+
+// Mock data for recommended tracks
+const mockRecommendedTracks: Track[] = [
+  {
+    id: "6",
+    title: "Watermelon Sugar",
+    artist: "Harry Styles",
+    album: "Fine Line",
+    duration: 174,
+    coverUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&h=200&fit=crop",
+    audioUrl: "#",
+  },
+  {
+    id: "7",
+    title: "Levitating",
+    artist: "Dua Lipa",
+    album: "Future Nostalgia",
+    duration: 203,
+    coverUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200&h=200&fit=crop",
+    audioUrl: "#",
+  },
+  {
+    id: "8",
+    title: "Don't Start Now",
+    artist: "Dua Lipa",
+    album: "Future Nostalgia",
+    duration: 183,
+    coverUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200&h=200&fit=crop",
+    audioUrl: "#",
+  },
+  {
+    id: "9",
+    title: "Circles",
+    artist: "Post Malone",
+    album: "Hollywood's Bleeding",
+    duration: 215,
+    coverUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop",
+    audioUrl: "#",
+  },
+  {
+    id: "10",
+    title: "Blueberry Eyes",
+    artist: "MAX ft. SUGA",
+    album: "Colour Vision",
+    duration: 186,
+    coverUrl: "https://images.unsplash.com/photo-1504898770365-14faca6a7320?w=200&h=200&fit=crop",
+    audioUrl: "#",
+  },
+];
 
 const mockPlaylist: Playlist = {
   id: "1",
@@ -48,7 +100,7 @@ const mockTracks: Track[] = [
     artist: "Tones and I",
     album: "The Kids Are Coming",
     duration: 210,
-    coverUrl: "https://images.unsplash.com/photo-1527283232607-f89f83e1238f?w=200&h=200&fit=crop",
+    coverUrl: "https://images.unsplash.com/photo-1527283232607-f89f8b71a8f8?w=200&h=200&fit=crop",
     audioUrl: "#",
   },
   {
@@ -74,11 +126,14 @@ const mockTracks: Track[] = [
 const PlaylistPage: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { playTrack } = usePlayer();
   const { toast } = useToast();
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [recommendedTracks, setRecommendedTracks] = useState<Track[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
@@ -93,8 +148,10 @@ const PlaylistPage: React.FC = () => {
         
         // Mock data for demo
         setTimeout(() => {
-          setPlaylist(mockPlaylist);
-          setTracks(mockTracks);
+          if (id) {
+            setPlaylist(mockPlaylist);
+            setTracks(mockTracks);
+          }
           setIsLoading(false);
         }, 500);
       } catch (error) {
@@ -103,8 +160,26 @@ const PlaylistPage: React.FC = () => {
       }
     };
 
+    const fetchRecommendations = async () => {
+      try {
+        setIsLoadingRecommendations(true);
+        // In a real app, this would call an API
+        // const recommendationsData = await getRecommendationsByPlaylist(id);
+        
+        // Mock data for demo
+        setTimeout(() => {
+          setRecommendedTracks(mockRecommendedTracks);
+          setIsLoadingRecommendations(false);
+        }, 800);
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+        setIsLoadingRecommendations(false);
+      }
+    };
+
     if (id) {
       fetchPlaylistData();
+      fetchRecommendations();
     } else {
       // If no ID, we're on the create playlist page
       setIsLoading(false);
@@ -136,6 +211,7 @@ const PlaylistPage: React.FC = () => {
       });
 
       // In a real app, redirect to the new playlist
+      navigate("/library");
     } catch (error) {
       console.error("Error creating playlist:", error);
       toast({
@@ -144,6 +220,17 @@ const PlaylistPage: React.FC = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleRefreshRecommendations = () => {
+    setIsLoadingRecommendations(true);
+    // In a real app, this would fetch new recommendations
+    setTimeout(() => {
+      // Shuffle the array to simulate new recommendations
+      const shuffled = [...mockRecommendedTracks].sort(() => 0.5 - Math.random());
+      setRecommendedTracks(shuffled);
+      setIsLoadingRecommendations(false);
+    }, 800);
   };
 
   const formatDuration = (seconds: number) => {
@@ -239,10 +326,40 @@ const PlaylistPage: React.FC = () => {
         </div>
       )}
 
+      {/* Recommended Tracks Section */}
+      {id && (
+        <div className="mt-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold">{t("playlist.recommended")}</h2>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleRefreshRecommendations}
+              disabled={isLoadingRecommendations}
+              className="flex items-center gap-1 active:scale-95"
+            >
+              <RefreshCw size={16} className={isLoadingRecommendations ? "animate-spin" : ""} />
+              {t("common.refresh")}
+            </Button>
+          </div>
+          
+          {isLoadingRecommendations ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-playpod-primary"></div>
+            </div>
+          ) : (
+            <TrackList tracks={recommendedTracks} showAddToPlaylist={true} />
+          )}
+        </div>
+      )}
+
       {/* Create Playlist Modal */}
       <CreatePlaylistModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={() => {
+          setIsCreateModalOpen(false);
+          if (!id) navigate("/library");
+        }}
         onCreatePlaylist={handleCreatePlaylist}
       />
     </div>

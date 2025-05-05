@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`bg-sidebar transition-all duration-300 ease-in-out border-r border-border flex flex-col h-[calc(100vh-16px-70px)] md:h-[calc(100vh-16px)] ${
+      className={`bg-sidebar transition-all duration-300 ease-in-out border-r border-border flex flex-col fixed h-[calc(100vh-16px-70px)] md:h-[calc(100vh-16px)] ${
         collapsed ? "w-[72px]" : "w-[250px]"
       }`}
     >

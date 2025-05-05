@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import HorizontalList from "../components/HorizontalList";
 import MediaCard from "../components/MediaCard";
@@ -253,7 +254,10 @@ const HomePage: React.FC = () => {
       ) : (
         <>
           {/* Recommended Section */}
-          <HorizontalList title={t("home.recommendedForYou")}>
+          <HorizontalList 
+            title={t("home.recommendedForYou")} 
+            viewAll={<Link to="/all-playlists/recommended">View all</Link>}
+          >
             {recommendations.map((track) => (
               <MediaCard
                 key={track.id}
@@ -267,7 +271,10 @@ const HomePage: React.FC = () => {
           </HorizontalList>
 
           {/* New Releases */}
-          <HorizontalList title={t("home.newReleases")} viewAll="/new-releases">
+          <HorizontalList 
+            title={t("home.newReleases")} 
+            viewAll={<Link to="/all-playlists/new-releases">View all</Link>}
+          >
             {newReleases.map((album) => (
               <MediaCard
                 key={album.id}
@@ -281,7 +288,10 @@ const HomePage: React.FC = () => {
           </HorizontalList>
 
           {/* Featured Playlists */}
-          <HorizontalList title={t("home.featuredPlaylists")} viewAll="/playlists">
+          <HorizontalList 
+            title={t("home.featuredPlaylists")} 
+            viewAll={<Link to="/all-playlists/featured">View all</Link>}
+          >
             {featuredPlaylists.map((playlist) => (
               <MediaCard
                 key={playlist.id}
@@ -295,7 +305,10 @@ const HomePage: React.FC = () => {
           </HorizontalList>
 
           {/* Top Artists */}
-          <HorizontalList title="Top Artists" viewAll="/artists">
+          <HorizontalList 
+            title="Top Artists" 
+            viewAll={<Link to="/all-playlists/artists">View all</Link>}
+          >
             {mockArtists.map((artist) => (
               <MediaCard
                 key={artist.id}
@@ -312,11 +325,13 @@ const HomePage: React.FC = () => {
           <div className="mb-10">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">{t("home.topCharts")}</h2>
-              <a href="/charts" className="text-sm text-playpod-primary hover:underline">
+              <Link to="/all-playlists/charts" className="text-sm text-playpod-primary hover:underline">
                 View all
-              </a>
+              </Link>
             </div>
-            <TrackList tracks={topTracks} />
+            <div className="overflow-x-hidden">
+              <TrackList tracks={topTracks} />
+            </div>
           </div>
         </>
       )}
