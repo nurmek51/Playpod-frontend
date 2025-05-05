@@ -23,6 +23,29 @@ const MainLayout: React.FC = () => {
       
       <MobileNav />
       <Player />
+
+      {/* Global styles */}
+      <style jsx global>{`
+        @keyframes heart-beat {
+          0% { transform: scale(1); }
+          25% { transform: scale(1.2); }
+          50% { transform: scale(0.95); }
+          75% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+        .animate-heart-beat {
+          animation: heart-beat 0.3s ease-in-out;
+        }
+        .active\:scale-95:active {
+          transform: scale(0.95);
+        }
+        .active\:scale-98:active {
+          transform: scale(0.98);
+        }
+        .active\:scale-90:active {
+          transform: scale(0.9);
+        }
+      `}</style>
     </div>
   );
 };

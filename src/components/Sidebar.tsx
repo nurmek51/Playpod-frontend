@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, Link } from "react-router-dom";
-import { Home, Library, Heart, ListMusic, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Library, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import Logo from "./Logo";
 
 const Sidebar: React.FC = () => {
@@ -15,8 +15,7 @@ const Sidebar: React.FC = () => {
   const navItems = [
     { name: t("navigation.home"), icon: Home, path: "/" },
     { name: t("navigation.library"), icon: Library, path: "/library" },
-    { name: t("navigation.favorites"), icon: Heart, path: "/favorites" },
-    { name: t("navigation.playlists"), icon: ListMusic, path: "/playlists" },
+    { name: t("navigation.favorites"), icon: Heart, path: "/favorites" }
   ];
 
   return (
@@ -26,10 +25,10 @@ const Sidebar: React.FC = () => {
       }`}
     >
       <div className="p-4 flex items-center justify-between">
-        {!collapsed && <Logo />}
+        {!collapsed && <div className="invisible md:visible"></div>}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="rounded-full p-1.5 bg-muted hover:bg-muted/80 transition-colors ml-auto"
+          className="rounded-full p-1.5 bg-muted hover:bg-muted/80 transition-colors ml-auto active:scale-95"
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
@@ -41,7 +40,7 @@ const Sidebar: React.FC = () => {
             <li key={item.path}>
               <Link
                 to={item.path}
-                className={`flex items-center px-3 py-2 rounded-md transition-colors ${
+                className={`flex items-center px-3 py-2 rounded-md transition-colors active:scale-95 ${
                   isActive(item.path)
                     ? "bg-playpod-primary text-white"
                     : "hover:bg-muted"

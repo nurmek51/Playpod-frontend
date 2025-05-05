@@ -48,21 +48,21 @@ const Header: React.FC = () => {
         <Logo />
       </div>
       
-      <div className="flex-1 md:flex-none mx-4 md:mx-8 max-w-md">
+      <div className="flex-1 md:flex-none md:w-1/2 mx-4 md:mx-8 max-w-xl">
         <SearchBar />
       </div>
       
       <div className="flex items-center space-x-4">
         <button
           onClick={handleLanguageChange}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/80 transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/80 transition-colors active:scale-95"
         >
           <span className="font-medium text-sm">{language.toUpperCase()}</span>
         </button>
         
         <button
           onClick={toggleTheme}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/80 transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/80 transition-colors active:scale-95"
         >
           {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
         </button>
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center justify-center rounded-full w-8 h-8 bg-playpod-primary text-white"
+              className="flex items-center justify-center rounded-full w-8 h-8 bg-playpod-primary text-white hover:bg-playpod-secondary transition-colors active:scale-95"
             >
               {user?.avatar ? (
                 <img
@@ -115,7 +115,7 @@ const Header: React.FC = () => {
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="text-sm font-medium bg-playpod-primary text-white px-4 py-2 rounded-full hover:bg-playpod-secondary transition-colors"
+            className="text-sm font-medium bg-playpod-primary text-white px-4 py-2 rounded-full hover:bg-playpod-secondary transition-colors active:scale-95"
           >
             {t("auth.login")}
           </button>

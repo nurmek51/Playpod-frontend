@@ -25,6 +25,10 @@ const TrackList: React.FC<TrackListProps> = ({
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
+  
+  const handlePlayTrack = (track: Track) => {
+    playTrack(track);
+  };
 
   return (
     <div className="w-full overflow-x-auto">
@@ -43,16 +47,23 @@ const TrackList: React.FC<TrackListProps> = ({
             <tr
               key={track.id}
               className="hover:bg-muted/50 transition-colors group border-b border-border"
-              onClick={() => playTrack(track)}
             >
               <td className="px-4 py-3 text-muted-foreground">
                 <div className="relative flex items-center justify-center w-6">
                   <span className="group-hover:hidden">{index + 1}</span>
-                  <Play size={16} className="hidden group-hover:block text-playpod-primary" />
+                  <div 
+                    className="hidden group-hover:flex cursor-pointer active:scale-90 transition-transform"
+                    onClick={() => handlePlayTrack(track)}
+                  >
+                    <Play size={16} className="text-playpod-primary" />
+                  </div>
                 </div>
               </td>
               <td className="px-4 py-3">
-                <div className="flex items-center">
+                <div 
+                  className="flex items-center cursor-pointer active:scale-98 transition-transform"
+                  onClick={() => handlePlayTrack(track)}
+                >
                   {showCover && (
                     <img
                       src={track.coverUrl}
@@ -73,7 +84,7 @@ const TrackList: React.FC<TrackListProps> = ({
               <td className="px-4 py-3">
                 <div className="flex items-center gap-3">
                   <FavoriteButton trackId={track.id} />
-                  <button className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-opacity">
+                  <button className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-opacity active:scale-95">
                     <MoreHorizontal size={18} />
                   </button>
                 </div>

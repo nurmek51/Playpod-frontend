@@ -14,6 +14,9 @@ import HomePage from "./pages/HomePage";
 import LibraryPage from "./pages/LibraryPage";
 import PlaylistPage from "./pages/PlaylistPage";
 import AlbumPage from "./pages/AlbumPage";
+import ArtistPage from "./pages/ArtistPage";
+import FavoritesPage from "./pages/FavoritesPage";
+import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -43,10 +46,10 @@ const App = () => (
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/playlist/:id" element={<PlaylistPage />} />
                     <Route path="/album/:id" element={<AlbumPage />} />
+                    <Route path="/artist/:id" element={<ArtistPage />} />
+                    <Route path="/favorites" element={<FavoritesPage />} />
+                    <Route path="/search" element={<SearchPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/favorites" element={<HomePage />} />
-                    <Route path="/playlists" element={<LibraryPage />} />
-                    <Route path="/search" element={<HomePage />} />
                   </Route>
                   
                   <Route path="*" element={<NotFound />} />

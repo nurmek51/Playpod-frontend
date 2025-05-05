@@ -1,7 +1,8 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePlayer } from "../contexts/PlayerContext";
 import { SkipBack, Play, Pause, SkipForward, Volume2, Volume1, VolumeX } from "lucide-react";
+import { Slider } from "./ui/slider";
 
 const Player: React.FC = () => {
   const {
@@ -18,15 +19,20 @@ const Player: React.FC = () => {
   } = usePlayer();
   
   const [isDragging, setIsDragging] = useState(false);
+  const [localVolume, setLocalVolume] = useState(volume);
   
-  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setProgress(value);
+  useEffect(() => {
+    setLocalVolume(volume);
+  }, [volume]);
+  
+  const handleProgressChange = (values: number[]) => {
+    setProgress(values[0]);
   };
   
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setVolume(value);
+  const handleVolumeChange = (values: number[]) => {
+    const newVolume = values[0];
+    setLocalVolume(newVolume);
+    setVolume(newVolume);
   };
   
   const formatTime = (seconds: number) => {
@@ -49,9 +55,22 @@ const Player: React.FC = () => {
   const displayTrack = currentTrack || mockTrack;
   
   const getVolumeIcon = () => {
-    if (volume === 0) return <VolumeX size={18} />;
-    if (volume < 0.5) return <Volume1 size={18} />;
+    if (localVolume === 0) return <VolumeX size={18} />;
+    if (localVolume < 0.5) return <Volume1 size={18} />;
     return <Volume2 size={18} />;
+  };
+
+  const toggleMute = () => {
+    if (localVolume === 0) {
+      const prevVolume = localStorage.getItem("previousVolume");
+      const newVolume = prevVolume ? parseFloat(prevVolume) : 0.7;
+      setVolume(newVolume);
+      setLocalVolume(newVolume);
+    } else {
+      localStorage.setItem("previousVolume", localVolume.toString());
+      setVolume(0);
+      setLocalVolume(0);
+    }
   };
   
   return (
@@ -74,21 +93,21 @@ const Player: React.FC = () => {
         <div className="flex items-center gap-4">
           <button 
             onClick={previousTrack}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors active:scale-95"
           >
             <SkipBack size={20} />
           </button>
           
           <button
             onClick={isPlaying ? pauseTrack : resumeTrack}
-            className="bg-playpod-primary text-white rounded-full p-2 hover:bg-playpod-secondary transition-colors"
+            className="bg-playpod-primary text-white rounded-full p-2 hover:bg-playpod-secondary transition-colors active:scale-95"
           >
             {isPlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
           </button>
           
           <button
             onClick={nextTrack}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors active:scale-95"
           >
             <SkipForward size={20} />
           </button>
@@ -99,22 +118,15 @@ const Player: React.FC = () => {
             {formatTime(currentTime)}
           </span>
           
-          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={progress}
-              onChange={handleProgressChange}
-              onMouseDown={() => setIsDragging(true)}
-              onMouseUp={() => setIsDragging(false)}
-              className="w-full h-1.5 appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-playpod-primary"
+          <div className="flex-1">
+            <Slider
+              value={[progress]}
+              min={0}
+              max={1}
+              step={0.01}
+              onValueChange={handleProgressChange}
+              className="h-1.5"
             />
-            <div 
-              className="h-full bg-playpod-primary" 
-              style={{ width: `${progress * 100}%` }}
-            ></div>
           </div>
           
           <span className="text-xs text-muted-foreground min-w-[30px]">
@@ -125,24 +137,22 @@ const Player: React.FC = () => {
       
       {/* Volume Control */}
       <div className="flex items-center gap-2 flex-1 max-w-[20%] justify-end">
-        <button className="text-muted-foreground">
+        <button 
+          className="text-muted-foreground hover:text-foreground transition-colors active:scale-95"
+          onClick={toggleMute}
+        >
           {getVolumeIcon()}
         </button>
         
-        <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden hidden sm:block">
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={handleVolumeChange}
-            className="w-full h-1.5 appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-playpod-primary"
+        <div className="w-24 hidden sm:block">
+          <Slider
+            value={[localVolume]}
+            min={0}
+            max={1}
+            step={0.01}
+            onValueChange={handleVolumeChange}
+            className="h-1.5"
           />
-          <div 
-            className="h-full bg-playpod-primary" 
-            style={{ width: `${volume * 100}%` }}
-          ></div>
         </div>
       </div>
     </div>

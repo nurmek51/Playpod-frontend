@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { addToFavorites, removeFromFavorites } from "../api/musicService";
+import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface FavoriteButtonProps {
   trackId: string;
@@ -15,7 +17,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   initialFavorite = false,
   size = "md",
 }) => {
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -31,7 +35,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   const handleToggleFavorite = async () => {
     if (!isAuthenticated) {
       // Handle unauthenticated state
-      // Maybe prompt user to login?
+      toast({
+        title: t("auth.required"),
+        description: t("auth.loginToFavorite"),
+        variant: "destructive",
+      });
       return;
     }
 
@@ -45,11 +53,17 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
     
     if (newFavoriteStatus) {
       localStorage.setItem("favorites", JSON.stringify([...favorites, trackId]));
+      toast({
+        description: t("favorites.added"),
+      });
     } else {
       localStorage.setItem(
         "favorites",
         JSON.stringify(favorites.filter((id: string) => id !== trackId))
       );
+      toast({
+        description: t("favorites.removed"),
+      });
     }
 
     // Call API
@@ -63,6 +77,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
       console.error("Error toggling favorite:", error);
       // Revert UI state if API call fails
       setIsFavorite(!newFavoriteStatus);
+      toast({
+        title: t("common.error"),
+        description: t("favorites.error"),
+        variant: "destructive",
+      });
     }
 
     // Reset animation state
@@ -83,7 +102,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
         e.stopPropagation();
         handleToggleFavorite();
       }}
-      className={`focus:outline-none ${
+      className={`focus:outline-none active:scale-90 transition-transform ${
         isAnimating ? "animate-heart-beat" : ""
       }`}
     >

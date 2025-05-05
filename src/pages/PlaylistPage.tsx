@@ -2,10 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Play, Shuffle, Clock, MoreHorizontal } from "lucide-react";
-import { getPlaylistById, getPlaylistTracks } from "../api/musicService";
+import { Play, Shuffle, Clock, MoreHorizontal, Plus } from "lucide-react";
+import { getPlaylistById, getPlaylistTracks, createPlaylist } from "../api/musicService";
+import { usePlayer } from "../contexts/PlayerContext";
 import TrackList from "../components/TrackList";
+import CreatePlaylistModal from "../components/CreatePlaylistModal";
+import { Button } from "@/components/ui/button";
 import { Track, Playlist } from "../api/musicService";
+import { useToast } from "@/hooks/use-toast";
 
 const mockPlaylist: Playlist = {
   id: "1",
@@ -70,9 +74,12 @@ const mockTracks: Track[] = [
 const PlaylistPage: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { playTrack } = usePlayer();
+  const { toast } = useToast();
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPlaylistData = async () => {
@@ -98,8 +105,46 @@ const PlaylistPage: React.FC = () => {
 
     if (id) {
       fetchPlaylistData();
+    } else {
+      // If no ID, we're on the create playlist page
+      setIsLoading(false);
+      setIsCreateModalOpen(true);
     }
   }, [id]);
+
+  const handlePlayAll = () => {
+    if (tracks.length > 0) {
+      playTrack(tracks[0]);
+    }
+  };
+
+  const handleCreatePlaylist = async (data: {
+    title: string;
+    description?: string;
+    isPublic: boolean;
+    tracks: string[];
+    coverUrl?: string;
+  }) => {
+    try {
+      // In a real app, call the API
+      // await createPlaylist(data.title, data.description);
+      
+      // Success notification
+      toast({
+        title: t("playlist.created"),
+        description: t("playlist.createdSuccess", { name: data.title }),
+      });
+
+      // In a real app, redirect to the new playlist
+    } catch (error) {
+      console.error("Error creating playlist:", error);
+      toast({
+        title: t("common.error"),
+        description: t("playlist.createError"),
+        variant: "destructive",
+      });
+    }
+  };
 
   const formatDuration = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -124,53 +169,66 @@ const PlaylistPage: React.FC = () => {
     );
   }
 
-  if (!playlist) {
-    return (
-      <div className="text-center py-10">
-        <h2 className="text-xl font-medium">Playlist not found</h2>
-      </div>
-    );
-  }
-
   return (
     <div>
+      {/* Create New Playlist Button (only on library page) */}
+      {!id && (
+        <div className="mb-8 flex justify-center">
+          <Button
+            onClick={() => setIsCreateModalOpen(true)}
+            size="lg"
+            className="flex items-center gap-2 active:scale-95"
+          >
+            <Plus size={18} />
+            {t("playlist.createNew")}
+          </Button>
+        </div>
+      )}
+      
       {/* Header */}
-      <div className="mb-8 md:mb-10">
-        <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
-          <img
-            src={playlist.coverUrl}
-            alt={playlist.title}
-            className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-lg shadow-md"
-          />
-          <div className="text-center md:text-left">
-            <div className="text-sm text-muted-foreground mb-1">PLAYLIST</div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-2">{playlist.title}</h1>
-            {playlist.description && (
-              <p className="text-muted-foreground mb-2">{playlist.description}</p>
-            )}
-            <div className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">{playlist.owner.username}</span>
-              <span className="mx-1">•</span>
-              <span>{tracks.length} songs</span>
-              <span className="mx-1">•</span>
-              <span>{formatDuration(getTotalDuration(tracks))}</span>
+      {playlist && (
+        <div className="mb-8 md:mb-10">
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
+            <img
+              src={playlist.coverUrl}
+              alt={playlist.title}
+              className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-lg shadow-md"
+            />
+            <div className="text-center md:text-left">
+              <div className="text-sm text-muted-foreground mb-1">PLAYLIST</div>
+              <h1 className="text-3xl md:text-5xl font-bold mb-2">{playlist.title}</h1>
+              {playlist.description && (
+                <p className="text-muted-foreground mb-2">{playlist.description}</p>
+              )}
+              <div className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">{playlist.owner.username}</span>
+                <span className="mx-1">•</span>
+                <span>{tracks.length} songs</span>
+                <span className="mx-1">•</span>
+                <span>{formatDuration(getTotalDuration(tracks))}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Controls */}
-      <div className="flex items-center gap-4 mb-8">
-        <button className="bg-playpod-primary text-white rounded-full p-3 hover:bg-playpod-secondary transition-colors">
-          <Play size={24} className="ml-0.5" />
-        </button>
-        <button className="bg-muted hover:bg-muted/80 rounded-full p-3 transition-colors">
-          <Shuffle size={24} />
-        </button>
-        <button className="bg-muted hover:bg-muted/80 rounded-full p-2 transition-colors">
-          <MoreHorizontal size={20} />
-        </button>
-      </div>
+      {playlist && (
+        <div className="flex items-center gap-4 mb-8">
+          <button 
+            className="bg-playpod-primary text-white rounded-full p-3 hover:bg-playpod-secondary transition-colors active:scale-95"
+            onClick={handlePlayAll}
+          >
+            <Play size={24} className="ml-0.5" />
+          </button>
+          <button className="bg-muted hover:bg-muted/80 rounded-full p-3 transition-colors active:scale-95">
+            <Shuffle size={24} />
+          </button>
+          <button className="bg-muted hover:bg-muted/80 rounded-full p-2 transition-colors active:scale-95">
+            <MoreHorizontal size={20} />
+          </button>
+        </div>
+      )}
 
       {/* Track List */}
       {tracks.length > 0 ? (
@@ -180,6 +238,13 @@ const PlaylistPage: React.FC = () => {
           <p>This playlist is empty.</p>
         </div>
       )}
+
+      {/* Create Playlist Modal */}
+      <CreatePlaylistModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreatePlaylist={handleCreatePlaylist}
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Search, X } from "lucide-react";
@@ -129,6 +129,13 @@ const SearchBar: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && query.trim().length > 0) {
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      setShowDropdown(false);
+    }
+  };
+
   const focusInput = () => {
     setIsExpanded(true);
   };
@@ -149,7 +156,7 @@ const SearchBar: React.FC = () => {
     <div 
       ref={searchBarRef}
       className={`relative transition-all duration-200 ease-in-out ${
-        isExpanded ? "w-full" : "w-[180px] md:w-[280px]"
+        isExpanded ? "w-full" : "w-full"
       }`}
     >
       <div className="relative flex items-center">
@@ -161,6 +168,7 @@ const SearchBar: React.FC = () => {
           type="text"
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           onFocus={focusInput}
           onBlur={blurInput}
           placeholder={t("search.searchPlaceholder")}
@@ -169,7 +177,7 @@ const SearchBar: React.FC = () => {
         {query && (
           <button
             onClick={handleClearSearch}
-            className="absolute right-3 text-muted-foreground hover:text-foreground"
+            className="absolute right-3 text-muted-foreground hover:text-foreground active:scale-95 transition-transform"
           >
             <X size={18} />
           </button>
@@ -199,7 +207,7 @@ const SearchBar: React.FC = () => {
                     {trackResults.map((result) => (
                       <div
                         key={result.id}
-                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer"
+                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer active:scale-98 transition-transform"
                         onClick={() => handleResultClick(result)}
                       >
                         <img
@@ -226,7 +234,7 @@ const SearchBar: React.FC = () => {
                     {artistResults.map((result) => (
                       <div
                         key={result.id}
-                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer"
+                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer active:scale-98 transition-transform"
                         onClick={() => handleResultClick(result)}
                       >
                         <img
@@ -252,7 +260,7 @@ const SearchBar: React.FC = () => {
                     {albumResults.map((result) => (
                       <div
                         key={result.id}
-                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer"
+                        className="flex items-center p-2 hover:bg-muted rounded-md cursor-pointer active:scale-98 transition-transform"
                         onClick={() => handleResultClick(result)}
                       >
                         <img
