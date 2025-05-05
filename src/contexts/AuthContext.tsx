@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { loginUser, registerUser, refreshToken, fetchUserProfile } from "../api/authService";
 
@@ -7,16 +6,16 @@ interface User {
   username: string;
   email: string;
   avatar?: string;
+  description?: string;
 }
 
 interface AuthContextType {
-  isAuthenticated: boolean;
   user: User | null;
-  isLoading: boolean;
-  error: string | null;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUserProfile: (userData: Partial<User>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -104,17 +103,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const updateUserProfile = async (userData: Partial<User>) => {
+    try {
+      // In a real app, call API endpoint
+      // await api.put('/users/profile', userData);
+      
+      // For demo, just update the local state
+      setUser(prevUser => prevUser ? {...prevUser, ...userData} : null);
+      
+      // Update localStorage
+      if (user) {
+        localStorage.setItem('user', JSON.stringify({...user, ...userData}));
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  };
+
+  // Auth context value
+  const value = {
+    user,
+    isAuthenticated,
+    login,
+    register,
+    logout,
+    updateUserProfile
+  };
+
   return (
     <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        user,
-        isLoading,
-        error,
-        login,
-        register,
-        logout,
-      }}
+      value={value}
     >
       {children}
     </AuthContext.Provider>

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, Link } from "react-router-dom";
 import { Home, Library, Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import Logo from "./Logo";
 
 const Sidebar: React.FC = () => {
   const { t } = useTranslation();
@@ -20,7 +19,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`bg-sidebar transition-all duration-300 ease-in-out border-r border-border flex flex-col fixed h-[calc(100vh-16px-70px)] md:h-[calc(100vh-16px)] ${
+      className={`bg-sidebar border-r border-border h-full transition-all duration-300 ease-in-out ${
         collapsed ? "w-[72px]" : "w-[250px]"
       }`}
     >
@@ -28,7 +27,7 @@ const Sidebar: React.FC = () => {
         {!collapsed && <div className="invisible md:visible"></div>}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="rounded-full p-1.5 bg-muted hover:bg-muted/80 transition-colors ml-auto active:scale-95"
+          className="rounded-full p-2 bg-muted hover:bg-muted/80 transition-colors ml-auto active:scale-95 flex items-center justify-center"
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>

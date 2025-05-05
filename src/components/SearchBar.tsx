@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -154,7 +155,7 @@ const SearchBar: React.FC = () => {
   return (
     <div 
       ref={searchBarRef}
-      className="relative w-full max-w-xl transition-all duration-200 ease-in-out"
+      className="relative w-full max-w-xl mx-auto transition-all duration-200 ease-in-out"
     >
       <div className="relative flex items-center">
         <Search 

@@ -1,91 +1,108 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Play, MoreHorizontal } from "lucide-react";
-import { usePlayer } from "../contexts/PlayerContext";
-import FavoriteButton from "./FavoriteButton";
 import { Track } from "../api/musicService";
+import { usePlayer } from "../contexts/PlayerContext";
+import { Play, MoreVertical, Plus } from "lucide-react";
+import FavoriteButton from "./FavoriteButton";
 
-interface TrackListProps {
+export interface TrackListProps {
   tracks: Track[];
-  showAlbum?: boolean;
-  showCover?: boolean;
+  showAddToPlaylist?: boolean;
 }
 
-const TrackList: React.FC<TrackListProps> = ({
-  tracks,
-  showAlbum = true,
-  showCover = true,
-}) => {
+const TrackList: React.FC<TrackListProps> = ({ tracks, showAddToPlaylist = false }) => {
   const { t } = useTranslation();
-  const { playTrack } = usePlayer();
+  const { playTrack, currentTrack } = usePlayer();
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' + secs : secs}`;
   };
-  
+
   const handlePlayTrack = (track: Track) => {
     playTrack(track);
   };
 
+  const isActive = (trackId: string) => {
+    return currentTrack?.id === trackId;
+  };
+
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full min-w-max table-auto">
+    <div className="w-full">
+      <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b border-border text-left">
-            <th className="px-4 py-3 w-12">#</th>
-            <th className="px-4 py-3">{t("playlist.title")}</th>
-            {showAlbum && <th className="px-4 py-3">{t("playlist.album")}</th>}
-            <th className="px-4 py-3 text-right">{t("playlist.duration")}</th>
-            <th className="px-4 py-3 w-12"></th>
+          <tr className="text-muted-foreground text-left text-sm border-b border-border">
+            <th className="w-8 pb-2">#</th>
+            <th className="pb-2">{t("track.title")}</th>
+            <th className="pb-2 hidden md:table-cell">{t("track.album")}</th>
+            <th className="pb-2 text-right pr-2">
+              <span className="sr-only">{t("track.duration")}</span>
+              <span aria-hidden="true">⏱</span>
+            </th>
+            <th className="w-10 pb-2">
+              <span className="sr-only">{t("track.actions")}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
           {tracks.map((track, index) => (
             <tr
               key={track.id}
-              className="hover:bg-muted/50 transition-colors group border-b border-border"
+              className={`group hover:bg-muted transition-colors ${
+                isActive(track.id) ? 'bg-muted/70' : ''
+              }`}
             >
-              <td className="px-4 py-3 text-muted-foreground">
-                <div className="relative flex items-center justify-center w-6">
-                  <span className="group-hover:hidden">{index + 1}</span>
-                  <div 
-                    className="hidden group-hover:flex cursor-pointer active:scale-90 transition-transform"
+              <td className="py-2 px-2">
+                <div className="relative flex items-center justify-center w-6 h-6">
+                  <span className="group-hover:invisible">{index + 1}</span>
+                  <button
+                    className="absolute invisible group-hover:visible"
                     onClick={() => handlePlayTrack(track)}
                   >
-                    <Play size={16} className="text-playpod-primary" />
-                  </div>
+                    <Play 
+                      size={16} 
+                      className="text-playpod-primary active:scale-90 transition-transform"
+                      fill={isActive(track.id) ? "currentColor" : "none"}
+                    />
+                  </button>
                 </div>
               </td>
-              <td className="px-4 py-3">
+              <td className="py-2">
                 <div 
-                  className="flex items-center cursor-pointer active:scale-98 transition-transform"
+                  className="flex items-center cursor-pointer"
                   onClick={() => handlePlayTrack(track)}
                 >
-                  {showCover && (
-                    <img
-                      src={track.coverUrl}
-                      alt={track.title}
-                      className="h-10 w-10 object-cover rounded mr-3"
-                    />
-                  )}
+                  <img
+                    src={track.coverUrl}
+                    alt={track.title}
+                    className="w-10 h-10 rounded mr-3 object-cover"
+                  />
                   <div>
-                    <div className="font-medium">{track.title}</div>
+                    <div className={`font-medium ${isActive(track.id) ? 'text-playpod-primary' : ''}`}>
+                      {track.title}
+                    </div>
                     <div className="text-sm text-muted-foreground">{track.artist}</div>
                   </div>
                 </div>
               </td>
-              {showAlbum && <td className="px-4 py-3 text-muted-foreground">{track.album || "-"}</td>}
-              <td className="px-4 py-3 text-muted-foreground text-right">
+              <td className="py-2 hidden md:table-cell">
+                <span className="text-muted-foreground">{track.album}</span>
+              </td>
+              <td className="py-2 text-right text-muted-foreground pr-2">
                 {formatDuration(track.duration)}
               </td>
-              <td className="px-4 py-3">
-                <div className="flex items-center gap-3">
+              <td className="py-2 text-right pr-2">
+                <div className="flex items-center justify-end space-x-1">
                   <FavoriteButton trackId={track.id} />
-                  <button className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-opacity active:scale-95">
-                    <MoreHorizontal size={18} />
+                  {showAddToPlaylist && (
+                    <button className="p-1.5 rounded-full hover:bg-background active:scale-95 transition-transform">
+                      <Plus size={16} />
+                    </button>
+                  )}
+                  <button className="p-1.5 rounded-full hover:bg-background active:scale-95 transition-transform">
+                    <MoreVertical size={16} />
                   </button>
                 </div>
               </td>

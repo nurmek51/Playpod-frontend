@@ -12,7 +12,7 @@ const MainLayout: React.FC = () => {
       <Header />
       
       <div className="flex flex-1">
-        <div className="hidden md:block w-[250px] flex-shrink-0">
+        <div className="hidden md:block md:sticky md:top-16 md:h-[calc(100vh-16px-70px)] md:self-start">
           <Sidebar />
         </div>
         

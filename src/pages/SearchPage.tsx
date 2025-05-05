@@ -1,15 +1,23 @@
+
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { Search as SearchIcon, X } from "lucide-react";
 import { search } from "../api/musicService";
 
+interface SearchResults {
+  tracks: any[];
+  artists: any[];
+  albums: any[];
+  playlists: any[];
+}
+
 const SearchPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
-  const [results, setResults] = useState<any>({
+  const [results, setResults] = useState<SearchResults>({
     tracks: [],
     artists: [],
     albums: [],
@@ -176,7 +184,7 @@ const SearchPage: React.FC = () => {
         ) : (
           <div>
             {/* Top result */}
-            {Object.values(results).some(arr => arr.length > 0) ? (
+            {results.tracks.length > 0 || results.artists.length > 0 || results.albums.length > 0 || results.playlists.length > 0 ? (
               <div className="space-y-8">
                 {results.tracks.length > 0 && (
                   <div>

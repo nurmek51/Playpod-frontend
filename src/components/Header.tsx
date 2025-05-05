@@ -54,12 +54,12 @@ const Header: React.FC = () => {
       </div>
       
       {showSearchBar && (
-        <div className="flex-1 flex justify-center mx-4 md:mx-8 max-w-xl">
+        <div className="flex-1 flex justify-center mx-auto max-w-xl">
           <SearchBar />
         </div>
       )}
       
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 ml-auto">
         <button
           onClick={handleLanguageChange}
           className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-muted/80 transition-colors active:scale-95"
