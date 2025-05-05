@@ -1,0 +1,86 @@
+
+{
+  "auth": {
+    "login": "Вход",
+    "register": "Регистрация",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "username": "Имя пользователя",
+    "forgotPassword": "Забыли пароль?",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "signUp": "Зарегистрироваться",
+    "signIn": "Войти",
+    "termsAgreement": "Я согласен с условиями использования",
+    "passwordStrength": "Надежность пароля",
+    "weak": "Слабый",
+    "medium": "Средний",
+    "strong": "Сильный"
+  },
+  "navigation": {
+    "home": "Главная",
+    "library": "Библиотека",
+    "favorites": "Избранное",
+    "playlists": "Плейлисты",
+    "search": "Поиск",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "logout": "Выход"
+  },
+  "player": {
+    "nowPlaying": "Сейчас играет",
+    "queue": "Очередь",
+    "next": "Следующий",
+    "previous": "Предыдущий"
+  },
+  "home": {
+    "welcome": "Добро пожаловать в PlayPod",
+    "recommendedForYou": "Рекомендовано для вас",
+    "newReleases": "Новые релизы",
+    "featuredPlaylists": "Рекомендуемые плейлисты",
+    "topCharts": "Топ чарты"
+  },
+  "library": {
+    "yourLibrary": "Ваша библиотека",
+    "playlists": "Плейлисты",
+    "albums": "Альбомы",
+    "artists": "Артисты",
+    "createPlaylist": "Создать плейлист"
+  },
+  "playlist": {
+    "play": "Воспроизвести",
+    "shuffle": "Перемешать",
+    "track": "Трек",
+    "title": "Название",
+    "artist": "Исполнитель",
+    "album": "Альбом",
+    "duration": "Длительность",
+    "addToPlaylist": "Добавить в плейлист",
+    "removeFromPlaylist": "Удалить из плейлиста"
+  },
+  "search": {
+    "searchPlaceholder": "Поиск треков, исполнителей...",
+    "recentSearches": "Недавние поиски",
+    "tracks": "Треки",
+    "artists": "Исполнители",
+    "albums": "Альбомы",
+    "playlists": "Плейлисты",
+    "noResults": "Результатов не найдено"
+  },
+  "profile": {
+    "editProfile": "Редактировать профиль",
+    "followers": "Подписчики",
+    "following": "Подписки",
+    "recentActivity": "Недавняя активность"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Что-то пошло не так",
+    "retry": "Повторить",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "edit": "Редактировать"
+  }
+}

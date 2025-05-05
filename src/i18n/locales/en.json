@@ -1,0 +1,86 @@
+
+{
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "username": "Username",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "termsAgreement": "I agree to the Terms and Conditions",
+    "passwordStrength": "Password Strength",
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong"
+  },
+  "navigation": {
+    "home": "Home",
+    "library": "Library",
+    "favorites": "Favorites",
+    "playlists": "Playlists",
+    "search": "Search",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "player": {
+    "nowPlaying": "Now Playing",
+    "queue": "Queue",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "home": {
+    "welcome": "Welcome to PlayPod",
+    "recommendedForYou": "Recommended for you",
+    "newReleases": "New releases",
+    "featuredPlaylists": "Featured playlists",
+    "topCharts": "Top charts"
+  },
+  "library": {
+    "yourLibrary": "Your Library",
+    "playlists": "Playlists",
+    "albums": "Albums",
+    "artists": "Artists",
+    "createPlaylist": "Create Playlist"
+  },
+  "playlist": {
+    "play": "Play",
+    "shuffle": "Shuffle",
+    "track": "Track",
+    "title": "Title",
+    "artist": "Artist",
+    "album": "Album",
+    "duration": "Duration",
+    "addToPlaylist": "Add to Playlist",
+    "removeFromPlaylist": "Remove from Playlist"
+  },
+  "search": {
+    "searchPlaceholder": "Search for tracks, artists...",
+    "recentSearches": "Recent Searches",
+    "tracks": "Tracks",
+    "artists": "Artists",
+    "albums": "Albums",
+    "playlists": "Playlists",
+    "noResults": "No results found"
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "followers": "Followers",
+    "following": "Following",
+    "recentActivity": "Recent Activity"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}
